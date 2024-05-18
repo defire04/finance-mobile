@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/authColorBackground">
+
+    <TextView
+        android:id="@+id/text_registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/registration"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/edit_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_registration"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
+        android:backgroundTint="@color/colorButtonBackground"
+        android:hint="@string/username_hint"
+        android:inputType="text"
+        android:textColorHint="@color/colorHintWhite" />
+
+    <EditText
+        android:id="@+id/edit_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_username"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
+        android:backgroundTint="@color/colorButtonBackground"
+        android:hint="@string/password_hint"
+        android:inputType="textPassword"
+        android:textColorHint="@color/colorHintWhite" />
+
+    <EditText
+        android:id="@+id/edit_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_password"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
+        android:backgroundTint="@color/colorButtonBackground"
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        android:textColorHint="@color/colorHintWhite" />
+
+    <LinearLayout
+        android:id="@+id/layout_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_email"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_first_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:backgroundTint="@color/colorButtonBackground"
+            android:hint="@string/hint_first_name"
+            android:inputType="text"
+            android:textColorHint="@color/colorHintWhite" />
+
+        <EditText
+            android:id="@+id/edit_last_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:backgroundTint="@color/colorButtonBackground"
+            android:hint="@string/hint_last_name"
+            android:inputType="text"
+            android:textColorHint="@color/colorHintWhite" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_name"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/colorButtonBackground"
+        android:text="@string/sign_up"
+        android:textColor="@color/colorButtonText" />
+
+    <TextView
+        android:id="@+id/alreadyHaveAccount"
+        style="@style/SubTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_signup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:minHeight="48dp"
+        android:text="@string/already_have_account" />
+
+
+</RelativeLayout>

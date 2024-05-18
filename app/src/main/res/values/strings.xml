@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">finance-mobile</string>
+    <string name="title_transactions">Transaction</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="password_hint">Password</string>
+    <string name="username_hint">Username</string>
+    <string name="btn_login_text">Login</string>
+    <string name="btn_register_text">Register</string>
+    <string name="log_in">Log In</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="welcome_to_finance_manage_mobile_app">Welcome to Finance Manage Mobile App</string>
+    <string name="piggy_bank_image">piggy_bank_image</string>
+    <string name="already_have_account">Already have account?</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_first_name">First Name</string>
+    <string name="hint_last_name">Last Name</string>
+    <string name="sign_up">Sign up</string>
+    <string name="registration">Registration</string>
+    <string name="categories">Category</string>
+    <string name="category_income">Income</string>
+    <string name="category_expenses">Expenses</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="unnamed_item">item</string>
+
+</resources>
