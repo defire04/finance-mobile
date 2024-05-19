@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.finance_mobile.R;
 import com.example.finance_mobile.databinding.FragmentCategoriesBinding;
 import com.example.finance_mobile.ui.category.expenses.ExpensesFragment;
+import com.example.finance_mobile.ui.category.income.IncomeFragment;
 
 public class CategoryFragment extends Fragment {
 
@@ -30,6 +31,7 @@ public class CategoryFragment extends Fragment {
 
         binding.addCategory.setOnClickListener(v -> {
             int selectedItemId = binding.bottomNavigationView.getSelectedItemId();
+
             if (selectedItemId == R.id.category_income) {
 
 
@@ -54,6 +56,7 @@ public class CategoryFragment extends Fragment {
 
             if (menuItem.getItemId() == R.id.category_income) {
 
+                changeFragment(new IncomeFragment());
             } else if (menuItem.getItemId() == R.id.category_expenses) {
                 changeFragment(new ExpensesFragment());
             }

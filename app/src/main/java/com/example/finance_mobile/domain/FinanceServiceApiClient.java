@@ -6,8 +6,11 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiClient {
+public class FinanceServiceApiClient {
     private static Retrofit retrofit = null;
+
+    private static final String baseFinanceServiceUrl = "http://176.36.34.106:8080";
+//    private static final String baseFinanceServiceUrl = "http://192.168.4.5:8080";
 
     public static Retrofit getClient(Context context) {
         if (retrofit == null) {
@@ -17,7 +20,7 @@ public class ApiClient {
                     .build();
             retrofit = new Retrofit.Builder()
 
-                    .baseUrl("http://192.168.4.5:8080")
+                    .baseUrl(baseFinanceServiceUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();
@@ -30,7 +33,7 @@ public class ApiClient {
 
             retrofit = new Retrofit.Builder()
 
-                    .baseUrl("http://192.168.4.5:8080")
+                    .baseUrl(baseFinanceServiceUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

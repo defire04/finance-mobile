@@ -14,7 +14,7 @@ import com.example.finance_mobile.R;
 import com.example.finance_mobile.data.api.finance.auth.AuthService;
 import com.example.finance_mobile.data.dto.ResponseModelSingle;
 import com.example.finance_mobile.data.dto.finance.auth.RegisterDTO;
-import com.example.finance_mobile.domain.ApiClient;
+import com.example.finance_mobile.domain.FinanceServiceApiClient;
 import com.example.finance_mobile.ui.auth.LoginActivity;
 import com.google.gson.Gson;
 
@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void register(RegisterDTO registerDTO) {
-        Retrofit retrofit = ApiClient.getClient();
+        Retrofit retrofit = FinanceServiceApiClient.getClient();
         AuthService authService = retrofit.create(AuthService.class);
 
         Call<ResponseModelSingle<RegisterDTO>> call = authService.register(registerDTO);
@@ -83,6 +83,9 @@ public class RegisterActivity extends AppCompatActivity {
                     try {
                         assert response.errorBody() != null;
                         responseModel = gson.fromJson(response.errorBody().string(), ResponseModelSingle.class);
+                        System.out.println(responseModel.getErrorMsg());
+                        System.out.println(response.code());
+                        System.out.println("SSSSSSSSSSSSSSSSSSSSSSSSS");
                         Toast.makeText(RegisterActivity.this, responseModel.getErrorMsg(), Toast.LENGTH_SHORT).show();
 
                     } catch (IOException e) {

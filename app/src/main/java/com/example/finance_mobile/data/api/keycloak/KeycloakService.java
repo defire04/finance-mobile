@@ -10,7 +10,7 @@ import retrofit2.http.POST;
 public interface KeycloakService {
 
     @FormUrlEncoded
-    @POST("/realms/finance-service/protocol/openid-connect/token")
+    @POST("/realms/finance-service-realm/protocol/openid-connect/token")
     Call<TokenResponseDTO> login(
             @Field("grant_type") String grantType,
             @Field("client_id") String clientId,

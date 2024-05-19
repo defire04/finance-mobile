@@ -1,4 +1,4 @@
-package com.example.finance_mobile.ui.category.expenses;
+package com.example.finance_mobile.ui.category.income;
 
 import android.app.Application;
 
@@ -20,15 +20,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ExpensesViewModel extends AndroidViewModel {
+public class IncomeViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<CategoryDTO>> categoriesList = new MutableLiveData<>();
 
     private final CategoryService categoryService;
 
-    private String accessToken;
+    private final String accessToken;
 
-    public ExpensesViewModel(@NonNull Application application) {
+    public IncomeViewModel(@NonNull Application application) {
 
         super(application);
 
@@ -43,9 +43,9 @@ public class ExpensesViewModel extends AndroidViewModel {
         MutableLiveData<String> result = new MutableLiveData<>();
 
 
-        categoryService.getCategory(accessToken, CategoryType.EXPENSE.name()).enqueue(new Callback<ResponseModelSingle<List<CategoryDTO>>>() {
+        categoryService.getCategory(accessToken, CategoryType.INCOME.name()).enqueue(new Callback<ResponseModelSingle<List<CategoryDTO>>>() {
             @Override
-            public void onResponse(Call<ResponseModelSingle<List<CategoryDTO>>> call, Response<ResponseModelSingle<List<CategoryDTO>>> response) {
+            public void onResponse(@NonNull Call<ResponseModelSingle<List<CategoryDTO>>> call, @NonNull Response<ResponseModelSingle<List<CategoryDTO>>> response) {
                 if (response.isSuccessful()) {
 
                     ResponseModelSingle<List<CategoryDTO>> data = response.body();
@@ -57,8 +57,8 @@ public class ExpensesViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<ResponseModelSingle<List<CategoryDTO>>> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<ResponseModelSingle<List<CategoryDTO>>> call, @NonNull Throwable t) {
+                result.postValue("Failure");
             }
         });
 
@@ -73,12 +73,12 @@ public class ExpensesViewModel extends AndroidViewModel {
     public void removeCategory(CategoryDTO category) {
         categoryService.delete(accessToken, category).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
 
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
 
             }
         });
