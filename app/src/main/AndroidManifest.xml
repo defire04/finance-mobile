@@ -15,20 +15,25 @@
         android:theme="@style/Theme.Financemobile"
         android:usesCleartextTraffic="true"
         tools:targetApi="31"
-
+        android:name=".FinanceMobileApp"
         >
+
         <activity
             android:name=".ui.register.RegisterActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+
+            />
 
         <activity
             android:name=".ui.auth.LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.Financemobile"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -15,6 +15,14 @@ public class CategoryDTO {
     @SerializedName("category_type")
     private CategoryType categoryType;
 
+    public CategoryDTO() {
+    }
+
+    public CategoryDTO(String name, CategoryType categoryType) {
+        this.name = name;
+        this.categoryType = categoryType;
+    }
+
     public Long getId() {
         return id;
     }
@@ -38,4 +46,7 @@ public class CategoryDTO {
     public void setCategoryType(CategoryType categoryType) {
         this.categoryType = categoryType;
     }
+
+
+
 }

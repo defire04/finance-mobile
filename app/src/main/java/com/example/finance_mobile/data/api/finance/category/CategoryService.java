@@ -11,6 +11,8 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface CategoryService {
@@ -20,5 +22,11 @@ public interface CategoryService {
 
     @HTTP(method = "DELETE", path = "/categories", hasBody = true)
     Call<Void> delete(@Header("Authorization") String token, @Body CategoryDTO category);
+
+    @POST("/categories")
+    Call<ResponseModelSingle<CategoryDTO>> createCategory(@Header("Authorization") String token, @Body CategoryDTO categoryDTO);
+
+    @PUT("/categories")
+    Call<ResponseModelSingle<CategoryDTO>> updateCategory(@Header("Authorization") String token, @Body CategoryDTO categoryDTO);
 
 }

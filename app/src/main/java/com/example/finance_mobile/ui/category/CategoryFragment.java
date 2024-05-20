@@ -12,7 +12,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.finance_mobile.R;
+import com.example.finance_mobile.data.dto.category.type.CategoryType;
 import com.example.finance_mobile.databinding.FragmentCategoriesBinding;
+import com.example.finance_mobile.ui.category.add_category.AddCategoryDialog;
 import com.example.finance_mobile.ui.category.expenses.ExpensesFragment;
 import com.example.finance_mobile.ui.category.income.IncomeFragment;
 
@@ -32,11 +34,12 @@ public class CategoryFragment extends Fragment {
         binding.addCategory.setOnClickListener(v -> {
             int selectedItemId = binding.bottomNavigationView.getSelectedItemId();
 
-            if (selectedItemId == R.id.category_income) {
 
+            if (selectedItemId == R.id.category_income) {
+                new AddCategoryDialog(CategoryType.INCOME, () -> changeFragment(new IncomeFragment())).show(getParentFragmentManager(), "Create INCOME");
 
             } else if (selectedItemId == R.id.category_expenses) {
-
+                new AddCategoryDialog(CategoryType.EXPENSE, () -> changeFragment(new ExpensesFragment())).show(getParentFragmentManager(), "Create EXPENSE");
             }
         });
         bindNavigation();
@@ -45,6 +48,8 @@ public class CategoryFragment extends Fragment {
         return binding.getRoot();
     }
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -52,6 +57,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private void bindNavigation() {
+        changeFragment(new IncomeFragment());
         binding.bottomNavigationView.setOnItemSelectedListener(menuItem -> {
 
             if (menuItem.getItemId() == R.id.category_income) {

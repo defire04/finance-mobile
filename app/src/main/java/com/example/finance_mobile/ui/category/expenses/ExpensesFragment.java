@@ -29,6 +29,8 @@ public class ExpensesFragment extends Fragment {
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,11 +41,17 @@ public class ExpensesFragment extends Fragment {
 
         expensesViewModel.getCategoriesList().observe(getViewLifecycleOwner(), categoryDTOS -> {
             if (categoryDTOS != null) {
-                binding.categoryExpensesList.setAdapter(new ExpensesAdapter(categoryDTOS, expensesViewModel));
+                binding.categoryExpensesList.setAdapter(new ExpensesAdapter(categoryDTOS, expensesViewModel, getParentFragmentManager()));
             } else {
                 System.out.println("НИЧЕГО НЕ НАЙДЕНО");
             }
         });
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        expensesViewModel.getCategories();
     }
 }

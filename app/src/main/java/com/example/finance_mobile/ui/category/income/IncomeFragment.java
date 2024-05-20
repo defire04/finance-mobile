@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -40,11 +41,21 @@ public class IncomeFragment extends Fragment {
 
         incomeViewModel.getCategoriesList().observe(getViewLifecycleOwner(), categoryDTOS -> {
             if (categoryDTOS != null) {
-                binding.categoryIncomeList.setAdapter(new IncomeAdapter(categoryDTOS, incomeViewModel));
+                binding.categoryIncomeList.setAdapter(new IncomeAdapter(categoryDTOS, incomeViewModel, getParentFragmentManager()));
             } else {
                 System.out.println("НИЧЕГО НЕ НАЙДЕНО");
             }
         });
         return binding.getRoot();
     }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        incomeViewModel.getCategories();
+
+        System.out.println("ddddddddddddddddd");
+    }
+
+
 }

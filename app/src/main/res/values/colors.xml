@@ -8,11 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-<!--    <color name="colorPrimary">#19262E</color>-->
-    <color name="colorPrimary">#1d2b34</color>
+    <!--    <color name="colorPrimary">#19262E</color>-->
+    <color name="colorPrimary">#334863</color>
     <color name="colorPrimaryDark">#FF0000</color>
+    <color name="background_fragment">#141d24</color>
 
-<!--    <color name="authColorBackground">#FF0000</color>-->
+    <!--    <color name="authColorBackground">#FF0000</color>-->
     <color name="authColorBackground">#1C253A</color>
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorTextSecondary">#B0BEC5</color>
@@ -20,10 +21,14 @@
     <color name="colorIncome">#00FF00</color>
     <color name="colorExpense">#FF0000</color>
     <color name="colorButtonBackground">#334863</color>
-<!--    <color name="colorButtonBackground">#FF0000</color>-->
+    <!--    <color name="colorButtonBackground">#FF0000</color>-->
     <color name="colorHintWhite">#FFFFFF</color>
     <color name="nav_bar_color">#fff3edf7</color>
+    <color name="background">#2B3A4E</color>
 
 
-
+    <color name="bottom_nav_background">#2B3A4E</color>
+    <color name="bottom_nav_item_color">#FFFFFF</color>
+    <color name="bottom_nav_item_color_selected">#4275B6</color>
+    <color name="trash_and_plus_button">#92BFD6</color>
 </resources>
