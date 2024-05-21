@@ -1,11 +1,13 @@
 package com.example.finance_mobile.ui.category.add_category;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,8 +27,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddCategoryDialog extends DialogFragment {
-
-
     private DialogAddCategoryBinding binding;
 
     private AddCategoryViewModel addCategoryViewModel;
@@ -46,7 +46,6 @@ public class AddCategoryDialog extends DialogFragment {
         this.category = category;
         this.onDismissListener = onDialogDismissListener;
     }
-
 
 
     @Override
@@ -100,6 +99,17 @@ public class AddCategoryDialog extends DialogFragment {
         });
 
         return binding.getRoot();
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        Window window = dialog.getWindow();
+        if (window != null){
+            window.setBackgroundDrawableResource(R.drawable.fab_square_light);
+        }
+        return dialog;
     }
 
     private void createCategory(String categoryName) {

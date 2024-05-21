@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.finance_mobile.R;
 import com.example.finance_mobile.databinding.FragmentIncomeBinding;
-import com.example.finance_mobile.ui.category.expenses.ExpensesViewModel;
 
 
 public class IncomeFragment extends Fragment {
