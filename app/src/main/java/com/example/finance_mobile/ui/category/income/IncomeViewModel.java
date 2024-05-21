@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.finance_mobile.data.api.finance.category.CategoryService;
 import com.example.finance_mobile.data.dto.ResponseModelSingle;
-import com.example.finance_mobile.data.dto.category.CategoryDTO;
-import com.example.finance_mobile.data.dto.category.type.CategoryType;
+import com.example.finance_mobile.data.dto.finance.balance.category.CategoryDTO;
+import com.example.finance_mobile.data.dto.finance.balance.category.type.CategoryType;
 import com.example.finance_mobile.domain.FinanceServiceApiClient;
 import com.example.finance_mobile.util.UserCredentialManager;
 

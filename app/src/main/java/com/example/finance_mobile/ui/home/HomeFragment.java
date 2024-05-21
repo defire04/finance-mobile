@@ -8,45 +8,69 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.finance_mobile.data.dto.finance.balance.balance.BalanceDTO;
+import com.example.finance_mobile.data.dto.finance.balance.balance.transaction.BalanceTransactionDTO;
 import com.example.finance_mobile.databinding.FragmentHomeBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     private HomeViewModel viewModel;
     private FragmentHomeBinding binding;
+
+    private BalanceDTO balanceDTO;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
+        viewModel.getBalanceLiveData().observe(getViewLifecycleOwner(), balanceDTO -> {
+            if (balanceDTO != null) {
+                updateBalanceUI(balanceDTO);
+            }
+        });
+
+
         binding.rvTransactions.setAdapter(new TransactionAdapter());
         binding.datePicker.setOnClickListener(v -> {
             showDateRangePicker();
         });
+
         binding.hideBalance.setOnClickListener(v -> {
-            //todo save balance view type
-            if (binding.tvBalance.getText().toString().contains("*")){
-                binding.tvBalance.setText(viewModel.getBalance());
-                return;
+            boolean isHidden = viewModel.isBalanceHidden();
+            viewModel.setBalanceHidden(!isHidden);
+            BalanceDTO balanceDTO = viewModel.getBalanceLiveData().getValue();
+            if (balanceDTO != null) {
+                updateBalanceUI(balanceDTO);
             }
-            // Get the length of the current text in tvBalance
+        });
+
+        return binding.getRoot();
+    }
+
+    private void updateBalanceUI(BalanceDTO balanceDTO) {
+        if (viewModel.isBalanceHidden()) {
             int length = binding.tvBalance.getText().length();
-            // Create a string of asterisks (*) with the same length
             StringBuilder hiddenText = new StringBuilder();
             for (int i = 0; i < length; i++) {
                 hiddenText.append('*');
             }
-            // Set the new text to tvBalance
-            binding.tvBalance.setText("$ " + hiddenText.toString());
-        });
-        return binding.getRoot();
+            binding.tvBalance.setText(viewModel.getCurrency().getSymbol() + hiddenText);
+        } else {
+            binding.tvBalance.setText(viewModel.getCurrency().getSymbol() + balanceDTO.getAmount().toString());
+            binding.incomeTextView.setText(balanceDTO.getIncomeAmount().toString());
+            binding.expensesTextView.setText(balanceDTO.getExpenseAmount().toString());
+        }
     }
+
 
     private void showDateRangePicker() {
         Calendar calendar = Calendar.getInstance();
@@ -56,7 +80,7 @@ public class HomeFragment extends Fragment {
 
         MaterialDatePicker<Pair<Long, Long>> picker =
                 MaterialDatePicker.Builder.dateRangePicker()
-                        .setTitleText("Обраний період")
+                        .setTitleText("Selected period")
                         .setSelection(new Pair<>(start, end))
                         .build();
 
@@ -84,6 +108,16 @@ public class HomeFragment extends Fragment {
                 //viewModel.setSelectedDateLimit(fromTill);
                 //binding.btnSetDataLimit.setText(fromTill.getTillFromString());
                 //binding.removeDateLimit.setVisibility(View.VISIBLE);
+
+
+                LiveData<List<BalanceTransactionDTO>> transactionsLiveData = viewModel.getTransactionsLiveData(pair.first, pair.second);
+
+                System.out.println(transactionsLiveData.getValue() != null);
+//                Objects.requireNonNull(transactionsLiveData.getValue()).forEach(x -> System.out.println(x.getCategoryType() + " " + x.getAmount()));
+
+                System.out.println("ddddddddddddddddddddddddddd");
+                System.out.println(pair.first);
+                System.out.println(pair.second);
             }
         });
 

@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.finance_mobile.R;
 import com.example.finance_mobile.data.dto.ResponseModelSingle;
-import com.example.finance_mobile.data.dto.category.CategoryDTO;
-import com.example.finance_mobile.data.dto.category.type.CategoryType;
+import com.example.finance_mobile.data.dto.finance.balance.category.CategoryDTO;
+import com.example.finance_mobile.data.dto.finance.balance.category.type.CategoryType;
 import com.example.finance_mobile.databinding.DialogAddCategoryBinding;
 import com.example.finance_mobile.ui.category.OnDialogDismissListener;
 

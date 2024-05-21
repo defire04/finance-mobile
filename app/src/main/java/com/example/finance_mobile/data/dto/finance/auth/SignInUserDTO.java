@@ -1,6 +1,6 @@
 package com.example.finance_mobile.data.dto.finance.auth;
 
-import com.example.finance_mobile.data.dto.finance.balance.BalanceDTO;
+import com.example.finance_mobile.data.dto.finance.balance.balance.BalanceDTO;
 import com.google.gson.annotations.SerializedName;
 
 public class SignInUserDTO {

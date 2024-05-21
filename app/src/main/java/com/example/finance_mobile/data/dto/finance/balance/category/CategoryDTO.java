@@ -1,6 +1,6 @@
-package com.example.finance_mobile.data.dto.category;
+package com.example.finance_mobile.data.dto.finance.balance.category;
 
-import com.example.finance_mobile.data.dto.category.type.CategoryType;
+import com.example.finance_mobile.data.dto.finance.balance.category.type.CategoryType;
 import com.google.gson.annotations.SerializedName;
 
 

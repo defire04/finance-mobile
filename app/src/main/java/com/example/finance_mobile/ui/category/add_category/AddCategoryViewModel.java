@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.finance_mobile.data.api.finance.category.CategoryService;
 import com.example.finance_mobile.data.dto.ResponseModelSingle;
-import com.example.finance_mobile.data.dto.category.CategoryDTO;
+import com.example.finance_mobile.data.dto.finance.balance.category.CategoryDTO;
 import com.example.finance_mobile.domain.FinanceServiceApiClient;
 import com.example.finance_mobile.util.UserCredentialManager;
 
@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 public class AddCategoryViewModel extends AndroidViewModel {
 
 
-    private String accessToken;
+    private final String accessToken;
 
     private final CategoryService categoryService;
 

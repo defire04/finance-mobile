@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.finance_mobile.R;
-import com.example.finance_mobile.data.dto.category.type.CategoryType;
+import com.example.finance_mobile.data.dto.finance.balance.category.type.CategoryType;
 import com.example.finance_mobile.databinding.FragmentCategoriesBinding;
 import com.example.finance_mobile.ui.category.add_category.AddCategoryDialog;
 import com.example.finance_mobile.ui.category.expenses.ExpensesFragment;

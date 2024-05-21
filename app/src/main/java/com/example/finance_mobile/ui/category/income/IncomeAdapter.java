@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finance_mobile.R;
-import com.example.finance_mobile.data.dto.category.CategoryDTO;
+import com.example.finance_mobile.data.dto.finance.balance.category.CategoryDTO;
 import com.example.finance_mobile.ui.category.add_category.AddCategoryDialog;
 
 import java.util.List;
