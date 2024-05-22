@@ -32,7 +32,7 @@ public class AuthInterceptor implements Interceptor {
             loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(loginIntent);
 
-            Toast.makeText(context, "Authentication error. Please login again.", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Authentication error. Please login again.", Toast.LENGTH_SHORT).show();
         }
 
         return response;

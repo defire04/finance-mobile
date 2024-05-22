@@ -13,12 +13,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.finance_mobile.data.dto.finance.balance.balance.BalanceDTO;
 import com.example.finance_mobile.data.dto.finance.balance.balance.transaction.BalanceTransactionDTO;
+import com.example.finance_mobile.data.dto.finance.balance.category.type.CategoryType;
 import com.example.finance_mobile.databinding.FragmentHomeBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
@@ -71,12 +80,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
     private void showDateRangePicker() {
+        // Получаем диапазон дат с помощью MaterialDatePicker
         Calendar calendar = Calendar.getInstance();
         Long start = calendar.getTimeInMillis();
         Long end = calendar.getTimeInMillis();
-
 
         MaterialDatePicker<Pair<Long, Long>> picker =
                 MaterialDatePicker.Builder.dateRangePicker()
@@ -84,45 +92,123 @@ public class HomeFragment extends Fragment {
                         .setSelection(new Pair<>(start, end))
                         .build();
 
+        // Обработчик выбора даты
         picker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
                 Pair<Long, Long> pair = (Pair<Long, Long>) selection;
 
+
                 long startDate = pair.first;
-                Calendar calendarStart = Calendar.getInstance();
-                calendarStart.setTimeInMillis(startDate);
-                calendarStart.set(Calendar.HOUR_OF_DAY, 0);
-                calendarStart.set(Calendar.MINUTE, 0);
-                calendarStart.set(Calendar.SECOND, 0);
-                calendarStart.set(Calendar.MILLISECOND, 0);
-
                 long endDate = pair.second;
-                Calendar calendarEnd = Calendar.getInstance();
-                calendarEnd.setTimeInMillis(endDate);
-                calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
-                calendarEnd.set(Calendar.MINUTE, 59);
-                calendarEnd.set(Calendar.SECOND, 59);
-                calendarEnd.set(Calendar.MILLISECOND, 999);
-                //FromTill fromTill = new FromTill(calendarStart.getTimeInMillis(), calendarEnd.getTimeInMillis());
-                //viewModel.setSelectedDateLimit(fromTill);
-                //binding.btnSetDataLimit.setText(fromTill.getTillFromString());
-                //binding.removeDateLimit.setVisibility(View.VISIBLE);
 
+                // Форматируем дату начала
+                Instant startInstant = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    startInstant = Instant.ofEpochMilli(startDate);
+                }
+                LocalDateTime startDateTime = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    startDateTime = LocalDateTime.ofInstant(startInstant, ZoneId.systemDefault());
+                }
+                String formattedStartDate = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    formattedStartDate = startDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                }
 
-                LiveData<List<BalanceTransactionDTO>> transactionsLiveData = viewModel.getTransactionsLiveData(pair.first, pair.second);
+                // Форматируем дату конца
+                Instant endInstant = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    endInstant = Instant.ofEpochMilli(endDate);
+                }
+                LocalDateTime endDateTime = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    endDateTime = LocalDateTime.ofInstant(endInstant, ZoneId.systemDefault());
+                }
+                String formattedEndDate = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    formattedEndDate = endDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                }
 
-                System.out.println(transactionsLiveData.getValue() != null);
-//                Objects.requireNonNull(transactionsLiveData.getValue()).forEach(x -> System.out.println(x.getCategoryType() + " " + x.getAmount()));
+                // Выводим информацию о выбранном периоде
+                System.out.println("Выбранный период: " + "SSSSSSSSSSSSSSSSSSSSSSS");
+                System.out.println("Начальная дата и время: " + formattedStartDate);
+                System.out.println("Конечная дата и время: " + formattedEndDate);
 
-                System.out.println("ddddddddddddddddddddddddddd");
-                System.out.println(pair.first);
-                System.out.println(pair.second);
+                // Подготовка данных
+                prepareData(startDate, endDate);
             }
         });
 
         picker.show(getParentFragmentManager(), picker.toString());
     }
+
+    // Метод для подготовки данных
+    private void prepareData(long startDate, long endDate) {
+        LiveData<List<BalanceTransactionDTO>> transactionsLiveData = viewModel.fetchGetTransactions(startDate, endDate);
+
+        System.out.println("DDDDDDDDDDDDDDDDDDDD");
+        System.out.println(transactionsLiveData.getValue() != null );
+        if (transactionsLiveData.getValue() != null) {
+            Map<String, DailyTransactions> dailyTransactionsMap = new HashMap<>();
+
+            transactionsLiveData.getValue().forEach(transaction -> {
+                // Получаем дату из транзакции
+                Instant instant = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    instant = Instant.ofEpochMilli(transaction.getTransactionDate());
+                }
+                LocalDate transactionDate = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    transactionDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+                }
+                String formattedDate = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    formattedDate = transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+
+                // Получаем или создаем объект DailyTransactions для текущей даты
+                DailyTransactions dailyTransactions = dailyTransactionsMap.get(formattedDate);
+                if (dailyTransactions == null) {
+                    dailyTransactions = new DailyTransactions();
+                    dailyTransactions.setIncomeTransactions(new ArrayList<>());
+                    dailyTransactions.setExpenseTransactions(new ArrayList<>());
+                    dailyTransactionsMap.put(formattedDate, dailyTransactions);
+                }
+
+                // Добавляем транзакцию в соответствующий список по типу категории
+                if (transaction.getCategoryType() == CategoryType.INCOME) {
+                    dailyTransactions.getIncomeTransactions().add(transaction);
+                } else if (transaction.getCategoryType() == CategoryType.EXPENSE) {
+                    dailyTransactions.getExpenseTransactions().add(transaction);
+                }
+            });
+
+
+
+            // Выводим содержимое карты
+            for (Map.Entry<String, DailyTransactions> entry : dailyTransactionsMap.entrySet()) {
+                String date = entry.getKey();
+                DailyTransactions dailyTransactions = entry.getValue();
+
+
+
+                System.out.println("Дата: " + date);
+                System.out.println("Доходы: ");
+                for (BalanceTransactionDTO incomeTransaction : dailyTransactions.getIncomeTransactions()) {
+                    System.out.println(incomeTransaction.getAmount());
+                    // Другие поля, которые вы хотите вывести
+                }
+                System.out.println("Расходы: ");
+                for (BalanceTransactionDTO expenseTransaction : dailyTransactions.getExpenseTransactions()) {
+                    System.out.println(expenseTransaction.getAmount());
+                    // Другие поля, которые вы хотите вывести
+                }
+                System.out.println("--------------------------------");
+            }
+        }
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -130,3 +216,25 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 }
+
+ class DailyTransactions {
+
+    private List<BalanceTransactionDTO> incomeTransactions;
+    private List<BalanceTransactionDTO> expenseTransactions;
+
+     public List<BalanceTransactionDTO> getIncomeTransactions() {
+         return incomeTransactions;
+     }
+
+     public void setIncomeTransactions(List<BalanceTransactionDTO> incomeTransactions) {
+         this.incomeTransactions = incomeTransactions;
+     }
+
+     public List<BalanceTransactionDTO> getExpenseTransactions() {
+         return expenseTransactions;
+     }
+
+     public void setExpenseTransactions(List<BalanceTransactionDTO> expenseTransactions) {
+         this.expenseTransactions = expenseTransactions;
+     }
+ }

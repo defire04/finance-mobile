@@ -15,6 +15,7 @@ import com.example.finance_mobile.data.dto.finance.balance.currency.Currency;
 import com.example.finance_mobile.domain.FinanceServiceApiClient;
 import com.example.finance_mobile.util.UserCredentialManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,10 +63,10 @@ public class HomeViewModel extends AndroidViewModel {
         return balanceLiveData;
     }
 
-    public LiveData<List<BalanceTransactionDTO>> getTransactionsLiveData(Long from, Long till) {
-        fetchGetTransactions(from, till);
-        return transactionsLiveData;
-    }
+//    public LiveData<List<BalanceTransactionDTO>> getTransactionsLiveData(Long from, Long till) {
+//        fetchGetTransactions(from, till);
+//        return transactionsLiveData;
+//    }
 
     public void fetchBalance() {
 
@@ -90,33 +91,27 @@ public class HomeViewModel extends AndroidViewModel {
         });
     }
 
-    public void fetchGetTransactions(Long from, Long till) {
+    public LiveData<List<BalanceTransactionDTO>> fetchGetTransactions(Long from, Long till) {
         balanceService.getTransactions(accessToken, from, till).enqueue(new Callback<ResponseModelSingle<List<BalanceTransactionDTO>>>() {
             @Override
             public void onResponse(@NonNull Call<ResponseModelSingle<List<BalanceTransactionDTO>>> call, @NonNull Response<ResponseModelSingle<List<BalanceTransactionDTO>>> response) {
-
-                System.out.println(response.code());
-                System.out.println(response.toString());
-
-                System.out.println("REEEEEEEEEEEEEEEEEEEEE");
                 if (response.isSuccessful() && response.body() != null) {
                     List<BalanceTransactionDTO> transactionDTOS = response.body().getData();
 
-                    Objects.requireNonNull(transactionDTOS).forEach(x -> System.out.println(x.getCategoryType() + " " + x.getAmount()));
-                    System.out.println("dddddddddaaaaaaaaaaaa");
                     transactionsLiveData.postValue(transactionDTOS);
                 } else {
-                    transactionsLiveData.postValue(null);
+                    transactionsLiveData.postValue(new ArrayList<>());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ResponseModelSingle<List<BalanceTransactionDTO>>> call, @NonNull Throwable t) {
-                transactionsLiveData.postValue(null);
+                transactionsLiveData.postValue(new ArrayList<>());
 
                 t.printStackTrace();
             }
         });
 
+        return transactionsLiveData;
     }
 }

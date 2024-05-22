@@ -58,9 +58,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            date = itemView.findViewById(R.id.textView9);
-            dayOfWeek = itemView.findViewById(R.id.textView10);
-            yearMonth = itemView.findViewById(R.id.textView11);
+            date = itemView.findViewById(R.id.dayOfTheMonth);
+            dayOfWeek = itemView.findViewById(R.id.dayOfTheWeek);
+            yearMonth = itemView.findViewById(R.id.tvMonthYear);
             positiveBalance = itemView.findViewById(R.id.tvIncome);
             negativeBalance = itemView.findViewById(R.id.tvExpenses);
         }
@@ -79,7 +79,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public ViewHolderExpanded(@NonNull View itemView) {
             super(itemView);
 
-            date = itemView.findViewById(R.id.textView9);
+            date = itemView.findViewById(R.id.dayOfTheMonth);
             //todo find views
         }
     }
