@@ -16,8 +16,8 @@ import com.example.finance_mobile.domain.FinanceServiceApiClient;
 import com.example.finance_mobile.util.UserCredentialManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,9 +41,15 @@ public class HomeViewModel extends AndroidViewModel {
     public HomeViewModel(@NonNull Application application) {
         super(application);
 
+
         Retrofit retrofit = FinanceServiceApiClient.getClient(getApplication());
         balanceService = retrofit.create(BalanceService.class);
         accessToken = new UserCredentialManager(getApplication()).getToken();
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        fetchGetTransactions(calendar.getTimeInMillis(), Calendar.getInstance().getTimeInMillis());
     }
 
     public Currency getCurrency() {
@@ -68,6 +74,11 @@ public class HomeViewModel extends AndroidViewModel {
 //        return transactionsLiveData;
 //    }
 
+
+    public MutableLiveData<List<BalanceTransactionDTO>> getTransactionsLiveData() {
+        return transactionsLiveData;
+    }
+
     public void fetchBalance() {
 
         balanceService.getBalance(accessToken).enqueue(new Callback<ResponseModelSingle<BalanceDTO>>() {
@@ -75,7 +86,6 @@ public class HomeViewModel extends AndroidViewModel {
             public void onResponse(@NonNull Call<ResponseModelSingle<BalanceDTO>> call, @NonNull Response<ResponseModelSingle<BalanceDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     BalanceDTO balance = response.body().getData();
-
 
 
                     balanceLiveData.postValue(balance);
@@ -91,7 +101,7 @@ public class HomeViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<List<BalanceTransactionDTO>> fetchGetTransactions(Long from, Long till) {
+    public void fetchGetTransactions(Long from, Long till) {
         balanceService.getTransactions(accessToken, from, till).enqueue(new Callback<ResponseModelSingle<List<BalanceTransactionDTO>>>() {
             @Override
             public void onResponse(@NonNull Call<ResponseModelSingle<List<BalanceTransactionDTO>>> call, @NonNull Response<ResponseModelSingle<List<BalanceTransactionDTO>>> response) {
@@ -112,6 +122,5 @@ public class HomeViewModel extends AndroidViewModel {
             }
         });
 
-        return transactionsLiveData;
     }
 }

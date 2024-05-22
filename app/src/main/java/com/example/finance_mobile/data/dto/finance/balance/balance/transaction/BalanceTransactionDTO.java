@@ -26,6 +26,9 @@ public class BalanceTransactionDTO {
     @SerializedName("category_type")
     private CategoryType categoryType;
 
+    @SerializedName("category_name")
+    private String categoryName;
+
     public Long getId() {
         return id;
     }
@@ -72,5 +75,13 @@ public class BalanceTransactionDTO {
 
     public void setCategoryType(CategoryType categoryType) {
         this.categoryType = categoryType;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

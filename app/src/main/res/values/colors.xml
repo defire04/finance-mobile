@@ -31,4 +31,7 @@
     <color name="bottom_nav_item_color">#FFFFFF</color>
     <color name="bottom_nav_item_color_selected">#4275B6</color>
     <color name="trash_and_plus_button">#92BFD6</color>
+
+   <color name="expense">#C6FF0000</color>
+   <color name="income">#FF03DAC5</color>
 </resources>

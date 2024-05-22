@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.finance_mobile.data.dto.finance.balance.balance.BalanceDTO;
@@ -20,7 +19,6 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     private HomeViewModel viewModel;
@@ -48,7 +45,6 @@ public class HomeFragment extends Fragment {
         });
 
 
-        binding.rvTransactions.setAdapter(new TransactionAdapter());
         binding.datePicker.setOnClickListener(v -> {
             showDateRangePicker();
         });
@@ -61,6 +57,8 @@ public class HomeFragment extends Fragment {
                 updateBalanceUI(balanceDTO);
             }
         });
+
+        bindRecycleView();
 
         return binding.getRoot();
     }
@@ -102,40 +100,6 @@ public class HomeFragment extends Fragment {
                 long startDate = pair.first;
                 long endDate = pair.second;
 
-                // Форматируем дату начала
-                Instant startInstant = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    startInstant = Instant.ofEpochMilli(startDate);
-                }
-                LocalDateTime startDateTime = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    startDateTime = LocalDateTime.ofInstant(startInstant, ZoneId.systemDefault());
-                }
-                String formattedStartDate = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    formattedStartDate = startDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                }
-
-                // Форматируем дату конца
-                Instant endInstant = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    endInstant = Instant.ofEpochMilli(endDate);
-                }
-                LocalDateTime endDateTime = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    endDateTime = LocalDateTime.ofInstant(endInstant, ZoneId.systemDefault());
-                }
-                String formattedEndDate = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    formattedEndDate = endDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                }
-
-                // Выводим информацию о выбранном периоде
-                System.out.println("Выбранный период: " + "SSSSSSSSSSSSSSSSSSSSSSS");
-                System.out.println("Начальная дата и время: " + formattedStartDate);
-                System.out.println("Конечная дата и время: " + formattedEndDate);
-
-                // Подготовка данных
                 prepareData(startDate, endDate);
             }
         });
@@ -143,72 +107,61 @@ public class HomeFragment extends Fragment {
         picker.show(getParentFragmentManager(), picker.toString());
     }
 
-    // Метод для подготовки данных
     private void prepareData(long startDate, long endDate) {
-        LiveData<List<BalanceTransactionDTO>> transactionsLiveData = viewModel.fetchGetTransactions(startDate, endDate);
 
-        System.out.println("DDDDDDDDDDDDDDDDDDDD");
-        System.out.println(transactionsLiveData.getValue() != null );
-        if (transactionsLiveData.getValue() != null) {
-            Map<String, DailyTransactions> dailyTransactionsMap = new HashMap<>();
+        viewModel.fetchGetTransactions(startDate, endDate);
 
-            transactionsLiveData.getValue().forEach(transaction -> {
-                // Получаем дату из транзакции
-                Instant instant = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    instant = Instant.ofEpochMilli(transaction.getTransactionDate());
-                }
-                LocalDate transactionDate = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    transactionDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-                }
-                String formattedDate = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    formattedDate = transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                }
-
-                // Получаем или создаем объект DailyTransactions для текущей даты
-                DailyTransactions dailyTransactions = dailyTransactionsMap.get(formattedDate);
-                if (dailyTransactions == null) {
-                    dailyTransactions = new DailyTransactions();
-                    dailyTransactions.setIncomeTransactions(new ArrayList<>());
-                    dailyTransactions.setExpenseTransactions(new ArrayList<>());
-                    dailyTransactionsMap.put(formattedDate, dailyTransactions);
-                }
-
-                // Добавляем транзакцию в соответствующий список по типу категории
-                if (transaction.getCategoryType() == CategoryType.INCOME) {
-                    dailyTransactions.getIncomeTransactions().add(transaction);
-                } else if (transaction.getCategoryType() == CategoryType.EXPENSE) {
-                    dailyTransactions.getExpenseTransactions().add(transaction);
-                }
-            });
+//        bindRecycleView();
 
 
-
-            // Выводим содержимое карты
-            for (Map.Entry<String, DailyTransactions> entry : dailyTransactionsMap.entrySet()) {
-                String date = entry.getKey();
-                DailyTransactions dailyTransactions = entry.getValue();
-
-
-
-                System.out.println("Дата: " + date);
-                System.out.println("Доходы: ");
-                for (BalanceTransactionDTO incomeTransaction : dailyTransactions.getIncomeTransactions()) {
-                    System.out.println(incomeTransaction.getAmount());
-                    // Другие поля, которые вы хотите вывести
-                }
-                System.out.println("Расходы: ");
-                for (BalanceTransactionDTO expenseTransaction : dailyTransactions.getExpenseTransactions()) {
-                    System.out.println(expenseTransaction.getAmount());
-                    // Другие поля, которые вы хотите вывести
-                }
-                System.out.println("--------------------------------");
-            }
-        }
     }
 
+    private void bindRecycleView() {
+        Map<String, DailyTransactions> dailyTransactionsMap = new HashMap<>();
+        viewModel.getTransactionsLiveData().observe(getViewLifecycleOwner(), transactionsLiveData -> {
+
+            if (transactionsLiveData != null) {
+
+
+                transactionsLiveData.forEach(transaction -> {
+                    Instant instant = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        instant = Instant.ofEpochMilli(transaction.getTransactionDate());
+                    }
+                    LocalDate transactionDate = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        transactionDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+                    }
+                    String formattedDate = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        formattedDate = transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    }
+
+
+
+                    DailyTransactions dailyTransactions = dailyTransactionsMap.get(formattedDate);
+                    if (dailyTransactions == null) {
+                        dailyTransactions = new DailyTransactions();
+                        dailyTransactions.setIncomeTransactions(new ArrayList<>());
+                        dailyTransactions.setExpenseTransactions(new ArrayList<>());
+                        dailyTransactionsMap.put(formattedDate, dailyTransactions);
+                    }
+
+                    if (transaction.getCategoryType() == CategoryType.INCOME) {
+                        dailyTransactions.getIncomeTransactions().add(transaction);
+                    } else if (transaction.getCategoryType() == CategoryType.EXPENSE) {
+                        dailyTransactions.getExpenseTransactions().add(transaction);
+                    }
+
+                });
+
+
+            }
+
+
+            binding.rvTransactions.setAdapter(new TransactionAdapter(dailyTransactionsMap));
+        });
+    }
 
     @Override
     public void onDestroyView() {
@@ -217,24 +170,29 @@ public class HomeFragment extends Fragment {
     }
 }
 
- class DailyTransactions {
+class DailyTransactions {
+
+    private String dateOfMonth;
+    private String dayOfWeek;
+    private String monthName;
+    private String yearMonth;
 
     private List<BalanceTransactionDTO> incomeTransactions;
     private List<BalanceTransactionDTO> expenseTransactions;
 
-     public List<BalanceTransactionDTO> getIncomeTransactions() {
-         return incomeTransactions;
-     }
+    public List<BalanceTransactionDTO> getIncomeTransactions() {
+        return incomeTransactions;
+    }
 
-     public void setIncomeTransactions(List<BalanceTransactionDTO> incomeTransactions) {
-         this.incomeTransactions = incomeTransactions;
-     }
+    public void setIncomeTransactions(List<BalanceTransactionDTO> incomeTransactions) {
+        this.incomeTransactions = incomeTransactions;
+    }
 
-     public List<BalanceTransactionDTO> getExpenseTransactions() {
-         return expenseTransactions;
-     }
+    public List<BalanceTransactionDTO> getExpenseTransactions() {
+        return expenseTransactions;
+    }
 
-     public void setExpenseTransactions(List<BalanceTransactionDTO> expenseTransactions) {
-         this.expenseTransactions = expenseTransactions;
-     }
- }
+    public void setExpenseTransactions(List<BalanceTransactionDTO> expenseTransactions) {
+        this.expenseTransactions = expenseTransactions;
+    }
+}
