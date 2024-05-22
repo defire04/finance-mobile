@@ -1,4 +1,4 @@
-package com.example.finance_mobile.ui.home;
+package com.example.finance_mobile.ui.home.transaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,4 +159,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         }
     }
+
+
 }

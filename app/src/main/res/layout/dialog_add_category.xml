@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/fab_square_light"
+        android:background="#00FFFFFF"
         android:text="@string/btn_cancel"
         android:textColor="#FF0000"
         app:layout_constraintEnd_toStartOf="@+id/saveButton"

@@ -60,7 +60,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (tokenResponse != null) {
                         saveTokens(tokenResponse);
+
                         navigateToMainActivity();
+
                     }
                 } else {
                     Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();

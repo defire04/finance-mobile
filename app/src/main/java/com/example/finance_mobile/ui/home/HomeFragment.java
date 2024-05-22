@@ -9,11 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import com.example.finance_mobile.R;
 import com.example.finance_mobile.data.dto.finance.balance.balance.BalanceDTO;
-import com.example.finance_mobile.data.dto.finance.balance.balance.transaction.BalanceTransactionDTO;
 import com.example.finance_mobile.data.dto.finance.balance.category.type.CategoryType;
 import com.example.finance_mobile.databinding.FragmentHomeBinding;
+import com.example.finance_mobile.ui.home.transaction.CreateTransactionDialog;
+import com.example.finance_mobile.ui.home.transaction.DailyTransactions;
+import com.example.finance_mobile.ui.home.transaction.TransactionAdapter;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -24,24 +28,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
     private HomeViewModel viewModel;
     private FragmentHomeBinding binding;
 
-    private BalanceDTO balanceDTO;
+    private boolean isFabOpen = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        viewModel.setFragmentManager(getParentFragmentManager());
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        viewModel.getBalanceLiveData().observe(getViewLifecycleOwner(), balanceDTO -> {
+        viewModel.getBalanceLiveData(getParentFragmentManager()).observe(getViewLifecycleOwner(), balanceDTO -> {
             if (balanceDTO != null) {
                 updateBalanceUI(balanceDTO);
             }
+
+        });
+
+        binding.manageAccount.setOnClickListener(v -> {
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment_activity_main).navigate(R.id.navigate_to_manage_account);
         });
 
 
@@ -52,7 +61,8 @@ public class HomeFragment extends Fragment {
         binding.hideBalance.setOnClickListener(v -> {
             boolean isHidden = viewModel.isBalanceHidden();
             viewModel.setBalanceHidden(!isHidden);
-            BalanceDTO balanceDTO = viewModel.getBalanceLiveData().getValue();
+            BalanceDTO balanceDTO = viewModel.getBalanceLiveData(getParentFragmentManager()).getValue();
+
             if (balanceDTO != null) {
                 updateBalanceUI(balanceDTO);
             }
@@ -60,8 +70,62 @@ public class HomeFragment extends Fragment {
 
         bindRecycleView();
 
+        binding.mainFab.setOnClickListener(view -> {
+            if (isFabOpen) {
+                closeFabMenu();
+            } else {
+                openFabMenu();
+            }
+        });
+
+
         return binding.getRoot();
     }
+
+    private void openFabMenu() {
+        isFabOpen = true;
+        binding.fabIncome.show();
+        binding.fabExpenses.show();
+        binding.fabIncome.animate().translationY(-40);
+        binding.fabExpenses.animate().translationY(-40);
+        binding.tvIncome2.animate().translationY(-40);
+        binding.tvExpeness2.animate().translationY(-40);
+
+        binding.tvIncome2.setVisibility(View.VISIBLE);
+        binding.tvExpeness2.setVisibility(View.VISIBLE);
+
+        binding.mainFab.setImageDrawable(getContext().getDrawable(R.drawable.ic_plus_wo_trim));
+
+        binding.fabIncome.setOnClickListener(v -> {
+            new CreateTransactionDialog(viewModel, CategoryType.INCOME).show(getParentFragmentManager(), "");
+            closeFabMenu();
+        });
+
+        binding.fabExpenses.setOnClickListener(v -> {
+            new CreateTransactionDialog(viewModel, CategoryType.EXPENSE).show(getParentFragmentManager(), "");
+            closeFabMenu();
+        });
+
+        binding.rootLayout.setVisibility(View.GONE);
+
+    }
+
+    private void closeFabMenu() {
+        isFabOpen = false;
+        binding.fabIncome.hide();
+        binding.fabExpenses.hide();
+        binding.fabIncome.animate().translationY(0);
+        binding.fabExpenses.animate().translationY(0);
+        binding.tvIncome2.animate().translationY(0);
+        binding.tvExpeness2.animate().translationY(0);
+
+        binding.rootLayout.setVisibility(View.VISIBLE);
+        binding.tvIncome2.setVisibility(View.GONE);
+        binding.tvExpeness2.setVisibility(View.GONE);
+
+        binding.mainFab.setImageDrawable(getContext().getDrawable(android.R.drawable.ic_input_add));
+    }
+
 
     private void updateBalanceUI(BalanceDTO balanceDTO) {
         if (viewModel.isBalanceHidden()) {
@@ -138,7 +202,6 @@ public class HomeFragment extends Fragment {
                     }
 
 
-
                     DailyTransactions dailyTransactions = dailyTransactionsMap.get(formattedDate);
                     if (dailyTransactions == null) {
                         dailyTransactions = new DailyTransactions();
@@ -170,29 +233,3 @@ public class HomeFragment extends Fragment {
     }
 }
 
-class DailyTransactions {
-
-    private String dateOfMonth;
-    private String dayOfWeek;
-    private String monthName;
-    private String yearMonth;
-
-    private List<BalanceTransactionDTO> incomeTransactions;
-    private List<BalanceTransactionDTO> expenseTransactions;
-
-    public List<BalanceTransactionDTO> getIncomeTransactions() {
-        return incomeTransactions;
-    }
-
-    public void setIncomeTransactions(List<BalanceTransactionDTO> incomeTransactions) {
-        this.incomeTransactions = incomeTransactions;
-    }
-
-    public List<BalanceTransactionDTO> getExpenseTransactions() {
-        return expenseTransactions;
-    }
-
-    public void setExpenseTransactions(List<BalanceTransactionDTO> expenseTransactions) {
-        this.expenseTransactions = expenseTransactions;
-    }
-}

@@ -3,6 +3,7 @@ package com.example.finance_mobile.ui.home;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,11 +11,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.finance_mobile.data.api.finance.balance.BalanceService;
 import com.example.finance_mobile.data.dto.ResponseModelSingle;
 import com.example.finance_mobile.data.dto.finance.balance.balance.BalanceDTO;
+import com.example.finance_mobile.data.dto.finance.balance.balance.RegisterBalanceDTO;
 import com.example.finance_mobile.data.dto.finance.balance.balance.transaction.BalanceTransactionDTO;
 import com.example.finance_mobile.data.dto.finance.balance.currency.Currency;
 import com.example.finance_mobile.domain.FinanceServiceApiClient;
 import com.example.finance_mobile.util.UserCredentialManager;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -30,12 +33,22 @@ public class HomeViewModel extends AndroidViewModel {
 
     private final BalanceService balanceService;
 
-    private final Currency currency = Currency.USD;
+    public Currency currency = Currency.USD;
 
     private boolean isBalanceHidden = false;
 
     private final MutableLiveData<BalanceDTO> balanceLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<BalanceTransactionDTO>> transactionsLiveData = new MutableLiveData<>();
+
+    private FragmentManager fragmentManager;
+
+    public void setFragmentManager(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
 
 
     public HomeViewModel(@NonNull Application application) {
@@ -45,6 +58,7 @@ public class HomeViewModel extends AndroidViewModel {
         Retrofit retrofit = FinanceServiceApiClient.getClient(getApplication());
         balanceService = retrofit.create(BalanceService.class);
         accessToken = new UserCredentialManager(getApplication()).getToken();
+        currency = new UserCredentialManager(getApplication()).getCurrency();
 
 
         Calendar calendar = Calendar.getInstance();
@@ -53,7 +67,7 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     public Currency getCurrency() {
-        return currency;
+        return new UserCredentialManager(getApplication()).getCurrency();
     }
 
     public boolean isBalanceHidden() {
@@ -64,22 +78,17 @@ public class HomeViewModel extends AndroidViewModel {
         isBalanceHidden = balanceHidden;
     }
 
-    public LiveData<BalanceDTO> getBalanceLiveData() {
-        fetchBalance();
+    public LiveData<BalanceDTO> getBalanceLiveData(FragmentManager fragmentManager) {
+        fetchBalance(fragmentManager);
         return balanceLiveData;
     }
-
-//    public LiveData<List<BalanceTransactionDTO>> getTransactionsLiveData(Long from, Long till) {
-//        fetchGetTransactions(from, till);
-//        return transactionsLiveData;
-//    }
 
 
     public MutableLiveData<List<BalanceTransactionDTO>> getTransactionsLiveData() {
         return transactionsLiveData;
     }
 
-    public void fetchBalance() {
+    public void fetchBalance(FragmentManager fragmentManager) {
 
         balanceService.getBalance(accessToken).enqueue(new Callback<ResponseModelSingle<BalanceDTO>>() {
             @Override
@@ -90,7 +99,12 @@ public class HomeViewModel extends AndroidViewModel {
 
                     balanceLiveData.postValue(balance);
                 } else {
-                    balanceLiveData.postValue(null);
+
+//                    fragmentManager
+
+                    if (response.code() == 400) {
+                        new RegisterBalanceDialog(HomeViewModel.this).show(fragmentManager, "");
+                    }
                 }
             }
 
@@ -122,5 +136,39 @@ public class HomeViewModel extends AndroidViewModel {
             }
         });
 
+    }
+
+
+    public void registerBalance(Currency currency, String inputBalance, FragmentManager fragmentManager) {
+        balanceService.createBalance(accessToken, new RegisterBalanceDTO(new BigDecimal(inputBalance), currency)).enqueue(new Callback<ResponseModelSingle<BalanceDTO>>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseModelSingle<BalanceDTO>> call, @NonNull Response<ResponseModelSingle<BalanceDTO>> response) {
+                fetchBalance(fragmentManager);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseModelSingle<BalanceDTO>> call, @NonNull Throwable t) {
+                fetchBalance(fragmentManager);
+            }
+        });
+    }
+
+    public void createTransaction(String amount, Long categoryId) {
+        balanceService.createTransaction(accessToken, new BalanceTransactionDTO(new BigDecimal(amount), categoryId)).enqueue(new Callback<ResponseModelSingle<BalanceDTO>>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseModelSingle<BalanceDTO>> call, @NonNull Response<ResponseModelSingle<BalanceDTO>> response) {
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.MONTH, -1);
+                fetchGetTransactions(calendar.getTimeInMillis(), Calendar.getInstance().getTimeInMillis());
+                fetchBalance(fragmentManager);
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseModelSingle<BalanceDTO>> call, @NonNull Throwable t) {
+
+            }
+        });
     }
 }

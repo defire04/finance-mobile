@@ -22,4 +22,16 @@
         android:name="com.example.finance_mobile.ui.category.CategoryFragment"
         android:label="@string/categories"
         tools:layout="@layout/fragment_categories" />
+    <fragment
+        android:id="@+id/manageAccountFragment"
+        android:name="com.example.finance_mobile.ui.home.manage_account.ManageAccountFragment"
+        android:label="Manage account"
+        tools:layout="@layout/fragment_manage_account" />
+
+    <action android:id="@+id/navigate_to_manage_account"
+        app:destination="@id/manageAccountFragment"
+        app:popUpTo="@layout/fragment_home"
+        />
+
+
 </navigation>

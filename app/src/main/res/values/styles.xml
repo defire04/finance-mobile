@@ -46,6 +46,9 @@
         <item name="cornerSize">10dp</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Fab.Square</item>
         <item name="android:background">@drawable/fab_square</item>
+
+
+
     </style>
 
     <!-- Оверлей для форми FAB -->

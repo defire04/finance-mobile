@@ -1,4 +1,4 @@
-package com.example.finance_mobile.ui.home;
+package com.example.finance_mobile.ui.home.transaction;
 
 
 import android.content.Context;
@@ -44,6 +44,7 @@ public class DayTransactionAdapter extends RecyclerView.Adapter<DayTransactionAd
 
         if (balanceTransactionDTO.getCategoryType().equals(CategoryType.INCOME)) {
             holder.amountOfDayTransaction.setTextColor(context.getColor(R.color.income));
+
             holder.imageView.setImageDrawable(context.getDrawable(R.drawable.ic_income));
         } else {
             holder.amountOfDayTransaction.setTextColor(context.getColor(R.color.expense));

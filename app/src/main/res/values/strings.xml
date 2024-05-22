@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">finance-mobile</string>
+    <string name="app_name">Finance</string>
     <string name="title_transactions">Transaction</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>

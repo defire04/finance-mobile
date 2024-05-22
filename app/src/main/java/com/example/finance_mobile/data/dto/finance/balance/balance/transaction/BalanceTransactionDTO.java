@@ -29,6 +29,12 @@ public class BalanceTransactionDTO {
     @SerializedName("category_name")
     private String categoryName;
 
+    public BalanceTransactionDTO(BigDecimal amount, Long categoryId) {
+        this.amount = amount;
+        this.categoryId = categoryId;
+
+    }
+
     public Long getId() {
         return id;
     }
