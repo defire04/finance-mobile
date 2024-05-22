@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.finance_mobile.R;
 import com.example.finance_mobile.data.dto.finance.balance.currency.Currency;
 import com.example.finance_mobile.databinding.RegisterBalanceDialogBinding;
+import com.example.finance_mobile.util.UserCredentialManager;
 
 public class RegisterBalanceDialog extends DialogFragment {
 
@@ -59,7 +60,8 @@ public class RegisterBalanceDialog extends DialogFragment {
             Currency currency = (Currency) binding.currency.getSelectedItem();
             String inputBalance = binding.balanceInput.getText().toString();
 
-            homeViewModel.setCurrency(currency);
+
+            new UserCredentialManager(getContext()).saveCurrency(currency);
             homeViewModel.registerBalance(currency, inputBalance, getParentFragmentManager());
             dismiss();
 

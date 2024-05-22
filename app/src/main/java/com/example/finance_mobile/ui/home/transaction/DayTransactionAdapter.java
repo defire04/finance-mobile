@@ -25,6 +25,9 @@ public class DayTransactionAdapter extends RecyclerView.Adapter<DayTransactionAd
 
     public DayTransactionAdapter(List<BalanceTransactionDTO> dayTransactions) {
         this.dayTransactions = dayTransactions;
+
+        System.out.println(":SSSSSSSSSSSSSSSSSSSSSSSS");
+        System.out.println(dayTransactions.size());
     }
 
     @NonNull

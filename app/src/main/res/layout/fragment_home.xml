@@ -222,7 +222,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/datePicker"
-                tools:listitem="@layout/transaction_item" />
+                tools:listitem="@layout/transaction_item"
+                android:clipToPadding="false"
+                android:paddingBottom="80dp"
+
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
@@ -272,6 +276,7 @@
         app:layout_constraintBottom_toTopOf="@+id/mainFab"
         app:layout_constraintEnd_toEndOf="@+id/mainFab"
         app:layout_constraintStart_toStartOf="@+id/mainFab"
+
         app:tint="#ed6e83" />
 
     <TextView

@@ -21,6 +21,7 @@ import com.example.finance_mobile.ui.home.transaction.TransactionAdapter;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -28,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
@@ -164,12 +166,30 @@ public class HomeFragment extends Fragment {
                 long startDate = pair.first;
                 long endDate = pair.second;
 
+                String startMonthYear = getMonthYearString(startDate);
+                String endMonthYear = getMonthYearString(endDate);
+
+                if (startMonthYear.equals(endMonthYear)) {
+                    binding.textView8.setText(startMonthYear);
+                } else {
+                    binding.textView8.setText(startMonthYear + "  -  " + endMonthYear);
+                }
+
                 prepareData(startDate, endDate);
             }
         });
 
         picker.show(getParentFragmentManager(), picker.toString());
     }
+
+    private String getMonthYearString(long dateInMillis) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateInMillis);
+
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault());
+        return monthFormat.format(calendar.getTime());
+    }
+
 
     private void prepareData(long startDate, long endDate) {
 
@@ -181,11 +201,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void bindRecycleView() {
-        Map<String, DailyTransactions> dailyTransactionsMap = new HashMap<>();
+
         viewModel.getTransactionsLiveData().observe(getViewLifecycleOwner(), transactionsLiveData -> {
 
             if (transactionsLiveData != null) {
-
+                Map<String, DailyTransactions> dailyTransactionsMap = new HashMap<>();
 
                 transactionsLiveData.forEach(transaction -> {
                     Instant instant = null;
@@ -218,11 +238,12 @@ public class HomeFragment extends Fragment {
 
                 });
 
-
+                binding.rvTransactions.setAdapter(new TransactionAdapter(dailyTransactionsMap));
+            } else {
+                binding.rvTransactions.setAdapter(new TransactionAdapter(new HashMap<>()));
             }
 
 
-            binding.rvTransactions.setAdapter(new TransactionAdapter(dailyTransactionsMap));
         });
     }
 

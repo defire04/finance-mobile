@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Set<Integer> expandedItems = new HashSet<>();
@@ -33,6 +34,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         this.dailyTransactionsMap = dailyTransactionsMap;
         itemHeader = new ArrayList<>(dailyTransactionsMap.keySet());
+
+
     }
 
 
@@ -81,6 +84,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         String dayOfWeek = dayOfWeekFormat.format(calendar.getTime());
 
 
+
         if (getItemViewType(position) == SIMPLE) {
             ViewHolder mHolder = (ViewHolder) holder;
 
@@ -100,11 +104,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mHolder.positiveBalance.setText(String.valueOf(income));
             mHolder.negativeBalance.setText(String.valueOf(expenses));
 
-            List<BalanceTransactionDTO> balanceTransactionDTOS = dailyTransactions.getIncomeTransactions();
+            Set<BalanceTransactionDTO> balanceTransactionDTOS = new HashSet<>(dailyTransactions.getIncomeTransactions());
 
             balanceTransactionDTOS.addAll(dailyTransactions.getExpenseTransactions());
 
-            mHolder.transaction.setAdapter(new DayTransactionAdapter(balanceTransactionDTOS));
+
+            mHolder.transaction.setAdapter(null);
+            mHolder.transaction.setAdapter(new DayTransactionAdapter(new ArrayList<>(balanceTransactionDTOS)));
 
         }
         holder.itemView.setOnClickListener(v -> {
