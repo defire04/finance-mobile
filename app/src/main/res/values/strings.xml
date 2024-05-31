@@ -25,5 +25,19 @@
     <string name="unnamed_item">item</string>
     <string name="save_btn">Save</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="amount">Amount</string>
+    <string name="category_item">category_item</string>
+    <string name="category_name">Category name</string>
+    <string name="income">Income</string>
+    <string name="expenses">Expenses</string>
+    <string name="default_amount">0.00$</string>
+    <string name="manage_accounts">Manage accounts</string>
+    <string name="month_year">May, 2024</string>
+    <string name="confirm">Confirm</string>
+    <string name="friday">Friday</string>
+    <string name="may_2024">May, 2024</string>
+    <string name="_17">17</string>
+    <string name="_1_000_00">$ 1,000.00</string>
+    <string name="total_balance">Total balance</string>
 
 </resources>

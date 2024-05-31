@@ -18,7 +18,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Amount"
+        android:hint="@string/amount"
 
         android:textColorHint="@color/white"
         android:inputType="numberDecimal"
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="Confirm"
+        android:text="@string/confirm"
         app:layout_constraintEnd_toEndOf="@+id/currency"
         app:layout_constraintTop_toBottomOf="@+id/currency" />
 </androidx.constraintlayout.widget.ConstraintLayout>
