@@ -9,7 +9,7 @@
     <string name="btn_register_text">Реєстрація</string>
     <string name="log_in">Увійти</string>
     <string name="don_t_have_an_account">Ще не маєте облікового запису?</string>
-    <string name="welcome_to_finance_manage_mobile_app">Ласкаво просимо до мобільного додатку для управління фінансами</string>
+    <string name="welcome_to_finance_manage_mobile_app">Ласкаво просимо до фінансового додатку</string>
     <string name="piggy_bank_image">зображення копилки</string>
     <string name="already_have_account">Вже маєте обліковий запис?</string>
     <string name="hint_email">Електронна пошта</string>
